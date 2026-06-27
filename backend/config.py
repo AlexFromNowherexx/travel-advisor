@@ -13,10 +13,8 @@ load_dotenv(ENV_FILE)
 
 
 class Settings(BaseSettings):
-    azure_openai_api_key: str | None = None
-    azure_openai_endpoint: str | None = None
-    azure_openai_deployment: str | None = None
-    azure_openai_api_version: str = "2024-12-01-preview"
+    openai_api_key: str | None = None
+    openai_model: str = "gpt-4o-mini"
     serpapi_api_key: str | None = None
     serpapi_limit: int = 5
     skill_file_path: str = "skills/travel-consultant/SKILL.md"

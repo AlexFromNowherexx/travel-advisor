@@ -1,7 +1,7 @@
 from functools import lru_cache
 
 # pyrefly: ignore [missing-import]
-from openai import AzureOpenAI
+from openai import OpenAI
 
 from .config import settings
 from .skill_loader import load_skill
@@ -36,15 +36,11 @@ def _format_serpapi_context(message: str) -> str:
 
 
 @lru_cache
-def get_client() -> AzureOpenAI:
-    if not settings.azure_openai_api_key:
-        raise RuntimeError("AZURE_OPENAI_API_KEY is not configured")
-    if not settings.azure_openai_endpoint:
-        raise RuntimeError("AZURE_OPENAI_ENDPOINT is not configured")
-    return AzureOpenAI(
-        api_version=settings.azure_openai_api_version,
-        azure_endpoint=settings.azure_openai_endpoint,
-        api_key=settings.azure_openai_api_key,
+def get_client() -> OpenAI:
+    if not settings.openai_api_key:
+        raise RuntimeError("OPENAI_API_KEY is not configured")
+    return OpenAI(
+        api_key=settings.openai_api_key,
     )
 
 
@@ -56,7 +52,7 @@ def get_reply(message: str, history: list[dict[str, str]]) -> str:
 
     client = get_client()
     response = client.chat.completions.create(
-        model=settings.azure_openai_deployment,
+        model=settings.openai_model,
         messages=[{"role": "system", "content": SKILL_PROMPT}, *messages],
     )
     content = response.choices[0].message.content if response.choices else None

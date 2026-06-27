@@ -1,16 +1,15 @@
-# Product specification — Voice Travel Agent MVP
+# Product specification — Travel Agent MVP
 
 **Version:** 0.2.0  
 **Status:** Draft (spec only, not implemented)
 
 ## 1. Summary
 
-A voice-based travel agent where users speak about a trip and receive AI-generated travel advice through speech and text: destination ideas, hotel suggestions, weather outlook, and food recommendations.
+A travel agent chatbot where users type about a trip and receive AI-generated travel advice: destination ideas, hotel suggestions, weather outlook, and food recommendations.
 
 ## 2. Goals
 
-- Deliver useful, conversational trip planning through voice-first interactions.
-- Support a clear audio pipeline: speech input, transcription, reasoning, and spoken output.
+- Deliver useful, conversational trip planning.
 - Separate UI (Streamlit) from API (FastAPI) for clarity and testability.
 - Encode travel-agent behavior in a reusable **travel consultant skill** file.
 
@@ -24,14 +23,14 @@ A voice-based travel agent where users speak about a trip and receive AI-generat
 
 ## 4. Users
 
-- **Traveler** — anyone planning a leisure or short business trip via voice or chat UI.
+- **Traveler** — anyone planning a leisure or short business trip via chat UI.
 
 ## 5. User stories
 
 | ID | Story | Acceptance |
 |----|--------|------------|
-| US-1 | As a traveler, I open the app and see a voice travel interface | Streamlit loads; title and short instructions visible |
-| US-2 | As a traveler, I speak about my trip | Audio can be captured and turned into a request |
+| US-1 | As a traveler, I open the app and see a travel consultant chat interface | Streamlit loads; title and chat box visible |
+| US-2 | As a traveler, I type about my trip | Text request is captured and sent to backend |
 | US-3 | As a traveler, I receive destination recommendations | Reply includes 1–3 destinations with brief rationale |
 | US-4 | As a traveler, I ask for hotels | Reply suggests options aligned with stated budget/style |
 | US-5 | As a traveler, I ask about weather | Reply describes typical/seasonal weather; notes if dates unknown |
@@ -42,8 +41,7 @@ A voice-based travel agent where users speak about a trip and receive AI-generat
 
 ### 6.1 Streamlit UI
 
-- Single-page voice-first chat with message history for the current browser session.
-- Text input remains available as a fallback alongside voice interaction.
+- Single-page chat interface with message history for the current browser session.
 - Display user and assistant messages in order.
 - Show error banner if API is unreachable or returns an error.
 - Optional sidebar: trip hints (destination, dates, budget) — **nice-to-have**, not required for MVP.
@@ -53,17 +51,11 @@ A voice-based travel agent where users speak about a trip and receive AI-generat
 - **POST `/api/v1/chat`**
   - Request body: `{ "message": string, "conversation_id"?: string }`
   - Response body: `{ "reply": string, "conversation_id": string }`
-- **POST `/api/v1/tts`**
-  - Request body: `{ "text": string }`
-  - Response body: binary `audio/wav`
-  - Use a local backend TTS engine so the frontend can play spoken replies
 - OpenAPI 3 schema auto-generated at `/docs` and `/openapi.json`.
 - Health check: **GET `/health`** → `{ "status": "ok" }`.
 - CORS enabled for local Streamlit origin.
-- Support voice-agent orchestration in the application flow.
 - Load model/provider settings from environment.
 - Inject travel consultant skill content into the model context.
-- Generate spoken output server-side for assistant replies.
 
 ### 6.3 Travel consultant skill
 
@@ -80,8 +72,8 @@ Must instruct the agent to:
 
 ### 6.4 Model/provider integration
 
-- Support **Azure OpenAI** as the model provider for chat generation.
-- Provider endpoint, API key, API version, and deployment name are configurable via environment variables.
+- Support **OpenAI** as the model provider for chat generation.
+- Model name and API key are configurable via environment variables.
 - Single-turn or short multi-turn context within the same `conversation_id` (in-memory for MVP).
 - Single-turn or short multi-turn context within the same `conversation_id` (in-memory for MVP).
 
@@ -128,10 +120,8 @@ Must instruct the agent to:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `AZURE_OPENAI_API_KEY` | Yes | Azure OpenAI API key |
-| `AZURE_OPENAI_ENDPOINT` | Yes | Azure OpenAI endpoint URL |
-| `AZURE_OPENAI_DEPLOYMENT` | Yes | Azure OpenAI deployment name |
-| `AZURE_OPENAI_API_VERSION` | No | Azure OpenAI API version (default `2024-12-01-preview`) |
+| `OPENAI_API_KEY` | Yes | OpenAI API key |
+| `OPENAI_MODEL` | No | OpenAI model name (default `gpt-4o-mini`) |
 | `API_BASE_URL` | No | Used by Streamlit (default `http://localhost:8000`) |
 
 ## 10. Success criteria (MVP)

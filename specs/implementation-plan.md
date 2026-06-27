@@ -44,9 +44,9 @@ No code beyond the markdown skill file in this phase.
 
 | # | Task | Output |
 |---|------|--------|
-| 2.1 | `backend/config.py` — settings from env | Azure OpenAI + app settings |
+| 2.1 | `backend/config.py` — settings from env | OpenAI + app settings |
 | 2.2 | `backend/skill_loader.py` — read SKILL.md | String for system prompt |
-| 2.3 | `backend/agent.py` — AzureOpenAI chat call with skill + history | `get_reply(message, history)` |
+| 2.3 | `backend/agent.py` — OpenAI chat call with skill + history | `get_reply(message, history)` |
 | 2.4 | `backend/memory.py` — in-memory dict by `conversation_id` | MVP session store |
 | 2.5 | `backend/main.py` — FastAPI app, CORS, routes | `/health`, `/api/v1/chat` |
 | 2.6 | `backend/schemas.py` — Pydantic request/response models | OpenAPI types |
@@ -72,45 +72,10 @@ backend/
 
 | # | Task | Output |
 |---|------|--------|
-| 3.1 | `frontend/app.py` — voice-first chat UI with `st.chat_message` | Session messages |
+| 3.1 | `frontend/app.py` — chat UI with `st.chat_message` | Session messages |
 | 3.2 | `frontend/api_client.py` — POST to `/api/v1/chat` via httpx | Error handling |
-| 3.3 | Add playback path for backend `/api/v1/tts` audio | Spoken reply playback |
-| 3.4 | Store `conversation_id` in `st.session_state` | Thread continuity |
-| 3.5 | Page title and one-line instructions | US-1 |
-
----
-
-## Phase 4 — Backend TTS
-
-| # | Task | Output |
-|---|------|--------|
-| 4.1 | Add local TTS config in `backend/config.py` | `TTS_*` settings |
-| 4.2 | Add `backend/tts.py` with local synthesis using `pyttsx3` | WAV generation |
-| 4.3 | Add `POST /api/v1/tts` in `backend/main.py` | Audio endpoint |
-| 4.4 | Add request/response validation in `backend/schemas.py` | OpenAPI types |
-
----
-
-## Phase 5 — Integration and polish
-
-| # | Task | Output |
-|---|------|--------|
-| 5.1 | Verify end-to-end: UI → API → Qwen/Ollama → TTS → UI | Demo-ready |
-| 5.2 | README run instructions match actual commands | Docs accurate |
-| 5.3 | Log completion in `specs/change-log.md` | Traceability |
-
----
-
-## Phase 6 — Tests (see test-plan)
-
-| # | Task | Output |
-|---|------|--------|
-| 6.1 | `tests/test_health.py` | Health endpoint |
-| 6.2 | `tests/test_chat.py` — mock model provider | Chat contract without live API |
-| 6.3 | Add test coverage for `/api/v1/tts` | Audio endpoint contract |
-| 6.4 | Manual scenarios from test-plan | Checklist signed off |
-
-**Run:** `streamlit run frontend/app.py`
+| 3.3 | Store `conversation_id` in `st.session_state` | Thread continuity |
+| 3.4 | Page title and chat box | US-1 |
 
 ---
 
@@ -118,7 +83,7 @@ backend/
 
 | # | Task | Output |
 |---|------|--------|
-| 4.1 | Verify end-to-end: UI → API → Qwen/Ollama → UI | Demo-ready |
+| 4.1 | Verify end-to-end: UI → API → OpenAI → UI | Demo-ready |
 | 4.2 | README run instructions match actual commands | Docs accurate |
 | 4.3 | Log completion in `specs/change-log.md` | Traceability |
 
