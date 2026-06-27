@@ -9,13 +9,13 @@ from openai import APIError, OpenAIError
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from backend.agent import get_reply
+    from backend.agent import get_reply, check_guardrails
     from backend.config import settings
     from backend.memory import append_message, get_history
     from backend.schemas import ChatRequest, ChatResponse, HealthResponse, TTSRequest, TTSResponse
     from backend.tts import synthesize_wav_bytes
 else:
-    from .agent import get_reply
+    from .agent import get_reply, check_guardrails
     from .config import settings
     from .memory import append_message, get_history
     from .schemas import ChatRequest, ChatResponse, HealthResponse, TTSRequest, TTSResponse
@@ -40,6 +40,13 @@ def health() -> HealthResponse:
 @app.post("/api/v1/chat", response_model=ChatResponse)
 def chat(payload: ChatRequest) -> ChatResponse:
     conversation_id = payload.conversation_id or str(uuid.uuid4())
+
+    if not check_guardrails(payload.message):
+        return ChatResponse(
+            reply="Xin lỗi, tôi chỉ có thể hỗ trợ các câu hỏi liên quan đến danh lam thắng cảnh và thông tin du lịch. Vui lòng không hỏi các chủ đề khác như lập trình hay kiến thức khác ngoài du lịch.",
+            conversation_id=conversation_id
+        )
+
     history = get_history(conversation_id)
 
     try:

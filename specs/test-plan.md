@@ -76,6 +76,7 @@ No E2E browser automation required for MVP.
 | MT-7 | API docs | Open `http://localhost:8000/docs` | `POST /api/v1/chat` documented; try from Swagger |
 | MT-8 | API down | Stop API, send chat message | Streamlit shows friendly error |
 | MT-9 | Missing provider config | Unset provider vars, restart API | Clear error (no silent hang) |
+| MT-10 | Sidebar chat history | Send a message, click New chat, then select the old chat in the left sidebar | Previous user and assistant messages are restored |
 
 Record pass/fail and date in a comment or `specs/change-log.md` when executed.
 

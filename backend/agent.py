@@ -57,3 +57,46 @@ def get_reply(message: str, history: list[dict[str, str]]) -> str:
     )
     content = response.choices[0].message.content if response.choices else None
     return content or "I'm sorry, I couldn't generate a reply right now."
+
+
+def check_guardrails(message: str) -> bool:
+    """
+    Checks if a user query violates the guardrail rules (e.g. asking about programming/coding).
+    Returns True if the message is valid (travel/sightseeing related).
+    Returns False if it is invalid.
+    """
+    prohibited_keywords = {
+        "code", "lập trình", "python", "javascript", "c++", "java", "html", "css",
+        "programming", "software", "developer", "viết hàm", "thuật toán", "algorithm",
+        "sql", "git", "class", "function", "coding", "viết code"
+    }
+    lower_message = message.lower()
+    if any(kw in lower_message for kw in prohibited_keywords):
+        return False
+
+    try:
+        client = get_client()
+        response = client.chat.completions.create(
+            model=settings.openai_model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a strict guardrail classifier. Classify if the user query is related to travel, sightseeing, "
+                        "landmarks, trip planning, hotels, weather, or dining. If the query is about programming, coding, engineering, "
+                        "mathematics, or anything completely unrelated to sightseeing/travel, output 'invalid'. "
+                        "Otherwise, output 'valid'. Output ONLY 'valid' or 'invalid' with no other text."
+                    )
+                },
+                {"role": "user", "content": message}
+            ],
+            temperature=0.0,
+            max_tokens=5
+        )
+        result = response.choices[0].message.content.strip().lower()
+        if "invalid" in result:
+            return False
+    except Exception:
+        # Fallback to True to avoid completely blocking the user in case of connection failure
+        return True
+    return True

@@ -6,10 +6,31 @@ Format: newest first.
 
 ---
 
+## [0.4.1] — 2026-06-27 — Add local sidebar chat history
+
+**Type:** Spec change | Feature
+**Scope:** product-spec | implementation-plan | test-plan | frontend
+
+### Changed
+
+- Added a ChatGPT-style left sidebar that lists previous local chats.
+- Added local JSON persistence for Streamlit chat history without adding accounts or a database.
+
+### Why
+
+- The user requested saving old conversation information on the left side of the screen.
+
+### Impact on implementation
+
+- Streamlit stores chats in `.travel_advisor_data/conversations.json`, which is ignored by git.
+- Selecting a saved chat restores its messages and conversation id.
+
+---
+
 ## [0.4.0] — 2026-06-04 — Replace TripAdvisor with SerpAPI & Add Voice-Enable Button
 
-**Type:** Spec change | Feature  
-**Scope:** product-spec | implementation-plan | test-plan | README  
+**Type:** Spec change | Feature
+**Scope:** product-spec | implementation-plan | test-plan | README
 
 ### Changed
 
@@ -98,7 +119,7 @@ Format: newest first.
 
 ## [0.2.0] — 2026-05-23 — MVP scaffold implemented
 
-**Type:** Feature  
+**Type:** Feature
 **Scope:** implementation-plan | test-plan
 
 ### Added (MVP scaffold)
@@ -125,7 +146,7 @@ Format: newest first.
 
 ## [0.1.0] — 2026-05-23 — Initial specs (no code)
 
-**Type:** Spec created  
+**Type:** Spec created
 **Author:** Spec-driven setup
 
 ### Added (initial spec set)
@@ -162,7 +183,7 @@ Format: newest first.
 ```markdown
 ## [x.y.z] — YYYY-MM-DD — Short title
 
-**Type:** Spec change | Feature | Fix  
+**Type:** Spec change | Feature | Fix
 **Scope:** product-spec | implementation-plan | test-plan
 
 ### Changed

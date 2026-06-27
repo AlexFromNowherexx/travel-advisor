@@ -76,6 +76,7 @@ backend/
 | 3.2 | `frontend/api_client.py` — POST to `/api/v1/chat` via httpx | Error handling |
 | 3.3 | Store `conversation_id` in `st.session_state` | Thread continuity |
 | 3.4 | Page title and chat box | US-1 |
+| 3.5 | Sidebar saved chats with local JSON persistence | US-8 |
 
 ---
 
