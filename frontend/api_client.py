@@ -23,9 +23,20 @@ def _extract_error_message(response: httpx.Response, exc: Exception) -> str:
     return str(exc)
 
 
-def send_chat_message(api_base_url: str, message: str, conversation_id: str | None = None) -> dict:
-    payload = {"message": message, "conversation_id": conversation_id}
-    response = httpx.post(f"{api_base_url}/api/v1/chat", json=payload, timeout=30)
+def send_chat_message(
+    api_base_url: str,
+    message: str,
+    conversation_id: str | None = None,
+    output_type: str = "tour_itinerary",
+    source_mode: str = "strict",
+) -> dict:
+    payload = {
+        "message": message,
+        "conversation_id": conversation_id,
+        "output_type": output_type,
+        "source_mode": source_mode,
+    }
+    response = httpx.post(f"{api_base_url}/api/v1/generate", json=payload, timeout=30)
     try:
         response.raise_for_status()
     except httpx.HTTPStatusError as exc:

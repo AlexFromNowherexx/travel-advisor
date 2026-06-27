@@ -1,95 +1,79 @@
-# Voice Travel Agent AI
+# Bac Bling AI Agent
 
-A voice-first travel agent MVP powered by **Azure OpenAI**. Users can speak or type in a **Streamlit** UI; a **FastAPI** backend exposes an OpenAPI-documented API and runs the agent logic. A **travel consultant skill** defines how the agent recommends destinations, hotels, weather, and food, and the backend can enrich answers with **SerpAPI** search context and now generates spoken replies through a local backend TTS endpoint.
+Source-aware Bac Ninh tourism and cultural exploration MVP. The app helps users create structured itineraries, check-in recommendations, historical-cultural narratives, and reviewer-friendly source summaries.
 
 ## Status
 
-**MVP scaffold implemented** — backend, frontend, skill file, and baseline tests are present.
+MVP source updated to match `specs/product-spec.md` version `0.3.0`.
 
 ## Stack
 
 | Layer | Technology |
 |-------|------------|
-| UI | Streamlit (Python) |
+| UI | Streamlit |
 | API | FastAPI + OpenAPI |
-| Agent | Azure OpenAI chat completions |
-| Retrieval | SerpAPI search context for destination/hotel/weather/food enrichment |
-| TTS | Local backend TTS (`pyttsx3`) returning `audio/wav` — configurable via `TTS_ENGINE` |
-| Guidance | Travel consultant skill file (`skills/travel-consultant/SKILL.md`) |
+| Agent orchestration | Four logical agents in `backend/agent.py` |
+| Sources | Built-in curated source catalog with verification warnings |
+| Guidance | `skills/travel-consultant/SKILL.md` |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    User[Traveler] --> UI[Streamlit voice/chat UI<br/>frontend/app.py]
-    UI -->|POST /api/v1/chat| API[FastAPI backend<br/>backend/main.py]
-    UI -->|POST /api/v1/tts| API
-    API --> Memory[In-memory conversation store<br/>backend/memory.py]
-    API --> Skill[Travel consultant skill<br/>skills/travel-consultant/SKILL.md]
-    API --> Agent[Agent orchestration<br/>backend/agent.py]
-    API --> TTS[Local TTS engine<br/>backend/tts.py]
-    Agent --> Provider[Azure OpenAI<br/>chat completions]
-    Agent --> SerpAPI[SerpAPI search context]
-    Provider --> Agent
-    SerpAPI --> Agent
-    Agent --> API
-    TTS --> API
-    API --> UI
-    UI --> User
+    User[User] --> UI[Streamlit UI]
+    UI -->|POST /api/v1/generate| API[FastAPI backend]
+    API --> Orchestrator[Orchestrator Agent]
+    Orchestrator --> Search[Search Agent]
+    Orchestrator --> Culture[Cultural-Historical Agent]
+    Orchestrator --> Tourism[Tourism Agent]
+    Search --> Sources[Curated source catalog]
+    Orchestrator --> Response[Structured response]
+    Response --> UI
 ```
 
-## Project layout
-
-```
-travel-advisor/
-├── README.md
-├── AGENTS.md
-├── .env.example
-├── requirements.txt
-├── specs/
-├── skills/travel-consultant/SKILL.md
-├── backend/
-├── frontend/
-└── tests/
-```
-
-## Prerequisites
-
-- Python 3.11+
-- Azure OpenAI access
-- SerpAPI credentials if you want destination/hotel/weather/food enrichment
-- Platform TTS support for `pyttsx3` (Windows Speech API, macOS `nsss`, Linux `espeak`)
-
-## Getting started
+## Getting Started
 
 1. Create and activate a Python virtual environment.
 2. Install dependencies:
-   - `pip install -r requirements.txt`
-3. Copy `.env.example` to `.env` and set Azure OpenAI, SerpAPI, and TTS variables.
-4. Make sure your Azure OpenAI deployment name matches `AZURE_OPENAI_DEPLOYMENT`.
-5. Start API:
-   - `uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000`
-6. Start UI:
-   - `streamlit run frontend/app.py`
-7. Open the Streamlit URL and ask for trip advice.
+   `pip install -r requirements.txt`
+3. Copy `.env.example` to `.env` and adjust values if needed.
+4. Start the API:
+   `uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000`
+5. Start the UI:
+   `streamlit run frontend/app.py`
+6. Open the Streamlit URL and ask about Bac Ninh routes, Quan ho, craft villages, check-in spots, sources, or industrial-zone route warnings.
 
 ## API
 
-- Health check: `GET /health`
-- Chat endpoint: `POST /api/v1/chat`
-- TTS endpoint: `POST /api/v1/tts`
-- Docs: `/docs`
+- `GET /health`
+- `POST /api/v1/generate`
+- `POST /api/v1/source-summary`
+- `POST /api/v1/tour`
+- `POST /api/v1/chat` compatibility alias for generate
+- `POST /api/v1/tts` legacy local TTS endpoint
+- OpenAPI docs: `/docs`
+
+`POST /api/v1/generate` accepts:
+
+```json
+{
+  "message": "Create a 1-day Bac Ninh tour themed around Quan ho and craft villages",
+  "output_type": "tour_itinerary",
+  "source_mode": "strict",
+  "conversation_id": "optional-uuid"
+}
+```
+
+The response includes `reply`, `output_type`, `intent`, `confidence`, `sources`, `warnings`, `agent_trace`, and `conversation_id`.
 
 ## Testing
 
-- Run: `pytest`
+Run:
 
-## Documentation
+`pytest -q`
 
-| File | Purpose |
-| ------ | --------- |
-| [AGENTS.md](AGENTS.md) | How AI agents should work in this repo |
-| [specs/product-spec.md](specs/product-spec.md) | What we are building |
-| [specs/implementation-plan.md](specs/implementation-plan.md) | How we build it |
-| [specs/test-plan.md](specs/test-plan.md) | How we verify it |
-| [specs/change-log.md](specs/change-log.md) | Spec and product changes |
+The automated tests cover health metadata, generate/chat contracts, source summaries, tour output, and sensitive historical claim handling.
+
+## Scope Limits
+
+The MVP does not include booking, payments, user accounts, live maps, guaranteed real-time weather, live opening hours, or confirmed industrial-zone access. Operational details are returned with verification warnings unless a reliable current source is available.

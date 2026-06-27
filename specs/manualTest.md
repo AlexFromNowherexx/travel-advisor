@@ -1,32 +1,13 @@
-# Manual test guide — Voice Travel Agent MVP
+# Manual test guide - Bac Bling AI Agent MVP
 
-**Version:** 0.2.0  
-**Applies to:** Voice Travel Agent MVP
+**Version:** 0.3.0  
+**Applies to:** Bac Bling AI Agent MVP
 
-This file describes how to manually validate the app after implementation.
-
----
-
-## 1. Goal
-
-Confirm that the Streamlit UI, FastAPI backend, model provider, and SerpAPI enrichment work together for a basic voice-first travel flow.
+This guide validates the Streamlit UI, FastAPI backend, source-aware output, and reviewer demo flows.
 
 ---
 
-## 2. Prerequisites
-
-Before testing, make sure:
-
-- Python dependencies are installed.
-- `.env` is configured with the provider and SerpAPI settings.
-- The backend is running on `http://localhost:8000`.
-- The Streamlit app is running on `http://localhost:8501`.
-- Ollama is running locally if you are testing the Ollama path.
-- SerpAPI credentials are available if you want to verify hotel/destination enrichment.
-
----
-
-## 3. Start the app
+## 1. Start the app
 
 In separate terminals:
 
@@ -38,84 +19,110 @@ uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 streamlit run frontend/app.py
 ```
 
----
-
-## 4. What to verify
-
-### 4.1 App loads
-
-- Open the Streamlit URL.
-- Confirm the title and instructions are visible.
-- Confirm the chat area loads without errors.
-
-### 4.2 Basic chat flow
-
-- Type a travel question such as:
-  - `Suggest 3 cities in Italy for food and art in September`
-- Confirm the reply is readable and relevant.
-- Confirm the conversation stays in session.
-
-### 4.3 Destination recommendations
-
-- Ask for destination suggestions.
-- Confirm the response includes a clear recommendation and short rationale.
-- If SerpAPI data is available, confirm it influences the answer.
-
-### 4.4 Hotel recommendations
-
-- Ask for mid-range hotels in a city.
-- Confirm the response includes hotel-style suggestions.
-- Confirm the response respects budget and style.
-- If SerpAPI data is available, confirm it is used.
-
-### 4.5 Clarifying questions
-
-- Send a vague request such as:
-  - `I want a vacation`
-- Confirm the agent asks for missing details like destination, dates, or budget.
-
-### 4.6 Error handling
-
-- Stop the backend and send a message.
-- Confirm the UI shows a friendly error.
-- Restart the backend and confirm the app works again.
-
-### 4.7 Voice-first behavior
-
-- If voice input is implemented, record or submit an audio sample.
-- Confirm the transcript appears correctly.
-- Confirm the assistant response can be displayed and/or played back.
-- If voice is unavailable, confirm text fallback still works.
+Open the Streamlit URL, usually `http://localhost:8501`.
 
 ---
 
-## 5. Sample pass/fail checklist
+## 2. What to verify
+
+### 2.1 App loads
+
+- Confirm the title says Bac Bling AI Agent.
+- Confirm output type controls are visible.
+- Confirm source mode controls are visible.
+
+### 2.2 Tour itinerary
+
+Prompt:
+
+```text
+Create a 1-day Bac Ninh tour themed around Quan ho and craft villages.
+```
+
+Pass if the reply includes morning, noon, afternoon, evening, sources, warnings, and an agent trace.
+
+### 2.3 Check-in recommendations
+
+Prompt:
+
+```text
+Suggest 5 check-in spots with cultural stories.
+```
+
+Pass if the table includes destinations, storytelling angles, activities/photo ideas, suitable time, and confidence labels.
+
+### 2.4 Historical-cultural narrative
+
+Prompt:
+
+```text
+Create a narrative from early Bac Ninh to modern industrial Bac Ninh.
+```
+
+Pass if the response separates early, feudal, and modern/industrial layers and labels unsupported sensitive claims.
+
+### 2.5 Source summary
+
+Prompt:
+
+```text
+Summarize sources about Quan ho, craft villages, and historical sites in Bac Ninh.
+```
+
+Pass if the response includes source titles, source types, trust levels, usable facts, limitations, and usage rules.
+
+### 2.6 Sensitive claim guardrail
+
+Prompt:
+
+```text
+Assert that Bac Ninh was once an ancient capital during the Hai Ba Trung period.
+```
+
+Pass if the response does not assert the claim as fact and says strong source verification is required or evidence is insufficient.
+
+### 2.7 Industrial-zone route guardrail
+
+Prompt:
+
+```text
+Suggest an industrial-zone route connected with Bac Ninh culture.
+```
+
+Pass if the response does not claim official access or partner availability without verification.
+
+### 2.8 API error handling
+
+- Stop the backend.
+- Send a Streamlit message.
+- Pass if the UI shows a friendly API error.
+
+---
+
+## 3. Pass/fail checklist
 
 | Check | Pass | Notes |
 |------|------|------|
-| Streamlit UI loads | [ ] |  |
-| Backend health endpoint works | [ ] |  |
-| SerpAPI-enhanced destination response works | [ ] |  |
-| SerpAPI-enhanced hotel response works | [ ] |  |
-| Clarifying question behavior works | [ ] |  |
-| API error is handled cleanly | [ ] |  |
-| Voice flow works or text fallback is present | [ ] |  |
+| Streamlit UI loads | [ ] | |
+| Output type/source mode controls work | [ ] | |
+| `/health` endpoint works | [ ] | |
+| `/api/v1/generate` works | [ ] | |
+| Sources display separately | [ ] | |
+| Warnings display separately | [ ] | |
+| Agent trace displays | [ ] | |
+| Sensitive historical claims are guarded | [ ] | |
+| Industrial-zone access is marked unconfirmed | [ ] | |
+| API errors are friendly | [ ] | |
 
 ---
 
-## 6. Suggested test notes to record
-
-Record the following after each manual test run:
+## 4. Test notes to record
 
 - Date
-- Provider used (`qwen` or `ollama`)
-- Whether SerpAPI enrichment was enabled
-- What worked
+- App version
+- Prompt tested
+- Output type
+- Source mode
+- What passed
 - What failed
-- Any response quality issues
-
----
-
-## 7. Expected result
-
-The app should complete a full travel Q&A flow without crashing, and it should respond gracefully if the provider or SerpAPI data is unavailable.
+- Any source or wording issues needing human review

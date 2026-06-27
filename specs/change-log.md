@@ -6,6 +6,29 @@ Format: newest first.
 
 ---
 
+## [0.4.1] - 2026-06-27 - Align implementation with Bac Bling product spec
+
+**Type:** Feature | Fix  
+**Scope:** source code | README | tests | skill
+
+### Changed
+
+- Updated backend contracts to match `product-spec.md` v0.3.0: `/api/v1/generate`, `/api/v1/source-summary`, `/api/v1/tour`, health metadata, source modes, output types, confidence, sources, warnings, and agent trace.
+- Replaced the generic travel skill behavior with Bac Bling source-aware Bac Ninh guidance.
+- Updated the Streamlit UI to show output type, source mode, sources, warnings, and agent trace.
+- Updated tests and README to match the Bac Bling MVP.
+
+### Why
+
+- The source code still reflected the previous generic voice travel agent direction while `product-spec.md` now defines Bac Bling AI Agent.
+
+### Impact on implementation
+
+- The MVP can run without live search by using curated source metadata and explicit verification warnings.
+- `/api/v1/chat` remains as a compatibility alias, but `/api/v1/generate` is the primary product-spec endpoint.
+
+---
+
 ## [0.4.0] — 2026-06-04 — Replace TripAdvisor with SerpAPI & Add Voice-Enable Button
 
 **Type:** Spec change | Feature  
