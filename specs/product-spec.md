@@ -307,6 +307,7 @@ The MVP should have a simple interface optimized for a clear hackathon demo. It 
 
 UI requirements:
 
+- Show a local demo login/register gate before the chat UI. This gate is only for controlling the hackathon demo screen; it is not production authentication and does not add backend accounts, roles, or authorization.
 - Allow users to enter requests in text.
 - Provide a dropdown or radio control for `output_type`:
   - `tour_itinerary`

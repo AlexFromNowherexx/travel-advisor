@@ -67,7 +67,7 @@ No E2E browser automation required for MVP.
 
 | ID | Scenario | Steps | Pass criteria |
 |----|----------|-------|----------------|
-| MT-1 | App loads | Open Streamlit URL | Chat UI visible, no crash |
+| MT-1 | App loads | Open Streamlit URL in a fresh session | Login/register UI visible, chat UI hidden, no crash |
 | MT-2 | Destination advice | Ask: “Suggest 3 cities in Italy for food and art in September” | Reply lists destinations with short rationale; SerpAPI enrichment used if available |
 | MT-3 | Hotels | Follow up: “Mid-range hotels in Florence” | Hotel-style suggestions; mentions budget alignment; SerpAPI data used when available |
 | MT-4 | Weather | Ask: “What’s the weather like in Florence in September?” | Weather description; disclaimer if approximate |
@@ -77,6 +77,7 @@ No E2E browser automation required for MVP.
 | MT-8 | API down | Stop API, send chat message | Streamlit shows friendly error |
 | MT-9 | Missing provider config | Unset provider vars, restart API | Clear error (no silent hang) |
 | MT-10 | Sidebar chat history | Send a message, click New chat, then select the old chat in the left sidebar | Previous user and assistant messages are restored |
+| MT-11 | Login and logout gate | Register a local demo account, log in, then click logout | Chat is visible only after login; logout returns to the login/register UI |
 
 Record pass/fail and date in a comment or `specs/change-log.md` when executed.
 

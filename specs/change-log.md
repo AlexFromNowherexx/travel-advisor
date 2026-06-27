@@ -6,6 +6,28 @@ Format: newest first.
 
 ---
 
+## [0.4.2] — 2026-06-27 — Require local demo login before chat
+
+**Type:** Spec change | Fix
+**Scope:** product-spec | implementation-plan | test-plan | frontend
+
+### Changed
+
+- Added a local demo login/register gate before the Streamlit chat UI.
+- Clarified that this is a demo screen gate, not production authentication, backend authorization, or role-based access.
+- Updated manual tests to expect login first and logout returning to login.
+
+### Why
+
+- The user reported that testing still opened the chat screen after adding login/logout and requested login first.
+
+### Impact on implementation
+
+- Streamlit now uses an explicit `authenticated` session flag instead of treating any existing `user_email` value as logged in.
+- Older Streamlit sessions that only have `user_email` are reset back to the login screen.
+
+---
+
 ## [0.4.1] — 2026-06-27 — Add local sidebar chat history
 
 **Type:** Spec change | Feature
