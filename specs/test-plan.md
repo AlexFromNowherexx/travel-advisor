@@ -77,6 +77,7 @@ No E2E browser automation required for MVP.
 | MT-8 | API down | Stop API, send chat message | Streamlit shows friendly error |
 | MT-9 | Missing provider config | Unset provider vars, restart API | Clear error (no silent hang) |
 | MT-10 | Sidebar chat history | Send a message, click New chat, then select the old chat in the left sidebar | Previous user and assistant messages are restored |
+| MT-11 | Follow-up suggestions | Send a travel question, then click one suggested follow-up | The suggestion is sent as the next user message and receives an assistant answer |
 
 Record pass/fail and date in a comment or `specs/change-log.md` when executed.
 

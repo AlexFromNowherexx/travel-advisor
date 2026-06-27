@@ -6,6 +6,44 @@ Format: newest first.
 
 ---
 
+## [0.4.3] — 2026-06-27 — Contextual follow-up suggestions
+
+**Type:** Fix | Feature
+**Scope:** frontend | product-spec
+
+### Changed
+
+- Follow-up suggestions are now generated from the recent conversation context instead of a fixed list.
+- Fixed duplicate Streamlit widget keys by rendering suggestions once and including message count in widget keys.
+
+### Why
+
+- The user requested suggestions related to the previous answer and reported duplicate widget key errors.
+
+### Impact on implementation
+
+- Suggestions adapt to themes such as family travel, friends/check-in, food, weather, hotels, and general itinerary planning.
+
+---
+## [0.4.2] — 2026-06-27 — Add clickable follow-up suggestions
+
+**Type:** Spec change | Feature
+**Scope:** product-spec | implementation-plan | test-plan | frontend
+
+### Changed
+
+- Added ChatGPT-style follow-up suggestions after assistant replies.
+- Suggestions cover travel companions, best time to go, and hour-by-hour itinerary planning.
+
+### Why
+
+- The user requested recommendation prompts after each answer, similar to ChatGPT.
+
+### Impact on implementation
+
+- Clicking a suggestion sends it as the next chat message and keeps conversation history.
+
+---
 ## [0.4.1] — 2026-06-27 — Add local sidebar chat history
 
 **Type:** Spec change | Feature

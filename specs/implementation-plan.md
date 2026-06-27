@@ -77,6 +77,7 @@ backend/
 | 3.3 | Store `conversation_id` in `st.session_state` | Thread continuity |
 | 3.4 | Page title and chat box | US-1 |
 | 3.5 | Sidebar saved chats with local JSON persistence | US-8 |
+| 3.6 | Clickable follow-up suggestions after assistant replies | US-12 |
 
 ---
 
