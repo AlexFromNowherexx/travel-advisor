@@ -1,6 +1,6 @@
 # Voice Travel Agent AI
 
-A voice-first travel agent MVP powered by **Azure OpenAI**. Users can speak or type in a **Streamlit** UI; a **FastAPI** backend exposes an OpenAPI-documented API and runs the agent logic. A **travel consultant skill** defines how the agent recommends destinations, hotels, weather, and food, and the backend can enrich answers with **SerpAPI** search context and now generates spoken replies through a local backend TTS endpoint.
+A voice-first travel agent MVP powered by **OpenAI**. Users can speak or type in a **Streamlit** UI; a **FastAPI** backend exposes an OpenAPI-documented API and runs the agent logic. A **travel consultant skill** defines how the agent recommends destinations, hotels, weather, and food, and the backend can enrich answers with **SerpAPI** search context and now generates spoken replies through a local backend TTS endpoint.
 
 ## Status
 
@@ -12,7 +12,7 @@ A voice-first travel agent MVP powered by **Azure OpenAI**. Users can speak or t
 |-------|------------|
 | UI | Streamlit (Python) |
 | API | FastAPI + OpenAPI |
-| Agent | Azure OpenAI chat completions |
+| Agent | OpenAI chat completions |
 | Retrieval | SerpAPI search context for destination/hotel/weather/food enrichment |
 | TTS | Local backend TTS (`pyttsx3`) returning `audio/wav` — configurable via `TTS_ENGINE` |
 | Guidance | Travel consultant skill file (`skills/travel-consultant/SKILL.md`) |
@@ -28,7 +28,7 @@ flowchart LR
     API --> Skill[Travel consultant skill<br/>skills/travel-consultant/SKILL.md]
     API --> Agent[Agent orchestration<br/>backend/agent.py]
     API --> TTS[Local TTS engine<br/>backend/tts.py]
-    Agent --> Provider[Azure OpenAI<br/>chat completions]
+    Agent --> Provider[OpenAI<br/>chat completions]
     Agent --> SerpAPI[SerpAPI search context]
     Provider --> Agent
     SerpAPI --> Agent
@@ -56,7 +56,7 @@ travel-advisor/
 ## Prerequisites
 
 - Python 3.11+
-- Azure OpenAI access
+- OpenAI API access
 - SerpAPI credentials if you want destination/hotel/weather/food enrichment
 - Platform TTS support for `pyttsx3` (Windows Speech API, macOS `nsss`, Linux `espeak`)
 
@@ -65,13 +65,12 @@ travel-advisor/
 1. Create and activate a Python virtual environment.
 2. Install dependencies:
    - `pip install -r requirements.txt`
-3. Copy `.env.example` to `.env` and set Azure OpenAI, SerpAPI, and TTS variables.
-4. Make sure your Azure OpenAI deployment name matches `AZURE_OPENAI_DEPLOYMENT`.
-5. Start API:
+3. Copy `.env.example` to `.env` and set `OPENAI_API_KEY`, optional `OPENAI_MODEL`, SerpAPI, and TTS variables.
+4. Start API:
    - `uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000`
-6. Start UI:
+5. Start UI:
    - `streamlit run frontend/app.py`
-7. Open the Streamlit URL and ask for trip advice.
+6. Open the Streamlit URL and ask for trip advice.
 
 ## API
 
