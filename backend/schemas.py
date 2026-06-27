@@ -8,9 +8,18 @@ class ChatRequest(BaseModel):
     conversation_id: str | None = None
 
 
+class ImageResult(BaseModel):
+    title: str
+    image_url: str
+    thumbnail_url: str | None = None
+    source_url: str | None = None
+
+
 class ChatResponse(BaseModel):
     reply: str
     conversation_id: str
+    images: list[ImageResult] = []
+    image_html: str = ""
 
 
 class HealthResponse(BaseModel):

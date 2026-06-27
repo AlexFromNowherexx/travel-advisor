@@ -71,6 +71,15 @@ def check_guardrails(message: str) -> bool:
         "sql", "git", "class", "function", "coding", "viết code"
     }
     lower_message = message.lower()
+    travel_or_image_keywords = {
+        "travel", "trip", "tour", "hotel", "weather", "food", "restaurant", "destination",
+        "sightseeing", "landmark", "check-in", "checkin", "image", "photo", "picture",
+        "ảnh", "hình", "hinh", "img", "quan họ", "quan ho", "bắc ninh", "bac ninh",
+        "du lá»‹ch", "danh lam", "tháº¯ng cáº£nh",
+    }
+    if any(keyword in lower_message for keyword in travel_or_image_keywords):
+        return True
+
     if any(kw in lower_message for kw in prohibited_keywords):
         return False
 

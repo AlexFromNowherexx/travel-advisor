@@ -43,6 +43,8 @@ No E2E browser automation required for MVP.
 | AT-7 | SerpAPI client success | Returns search results |
 | AT-8 | SerpAPI client failure | Falls back safely without breaking chat flow |
 | AT-9 | SerpAPI request for search context | Agent includes retrieved context when available |
+| AT-9a | SerpAPI image search disabled | Image search returns an empty list without breaking chat |
+| AT-9b | Chat image payload | Mocked image search returns `images` and `image_html` in chat response |
 
 ### 2.4 Skill loader
 
@@ -78,6 +80,7 @@ No E2E browser automation required for MVP.
 | MT-9 | Missing provider config | Unset provider vars, restart API | Clear error (no silent hang) |
 | MT-10 | Sidebar chat history | Send a message, click New chat, then select the old chat in the left sidebar | Previous user and assistant messages are restored |
 | MT-11 | Follow-up suggestions | Send a travel question, then click one suggested follow-up | The suggestion is sent as the next user message and receives an assistant answer |
+| MT-12 | Image search | Ask: `Search images for Quan ho Bac Ninh` | Returned images are displayed under the answer as HTML `<img>` elements when SerpAPI is configured |
 
 Record pass/fail and date in a comment or `specs/change-log.md` when executed.
 

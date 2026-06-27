@@ -14,6 +14,14 @@ class SerpApiResult:
     snippet: str | None = None
 
 
+@dataclass(slots=True)
+class SerpApiImageResult:
+    title: str
+    image_url: str
+    thumbnail_url: str | None = None
+    source_url: str | None = None
+
+
 class SerpApiClientError(RuntimeError):
     pass
 
@@ -57,9 +65,48 @@ class SerpApiClient:
             )
         return results
 
+    def search_images(self, query: str) -> list[SerpApiImageResult]:
+        if not self.enabled():
+            return []
+
+        params = {
+            "engine": "google_images",
+            "q": query,
+            "api_key": self.api_key,
+            "num": self.limit,
+        }
+        url = "https://serpapi.com/search"
+
+        try:
+            response = httpx.get(url, params=params, timeout=20)
+            response.raise_for_status()
+            payload = response.json()
+        except (httpx.HTTPError, ValueError) as exc:
+            raise SerpApiClientError(f"SerpAPI image request failed: {exc}") from exc
+
+        image_results = payload.get("images_results") or []
+        results: list[SerpApiImageResult] = []
+        for item in image_results[: self.limit]:
+            original = item.get("original") or item.get("thumbnail")
+            if not original:
+                continue
+            results.append(
+                SerpApiImageResult(
+                    title=str(item.get("title") or "Travel image"),
+                    image_url=str(original),
+                    thumbnail_url=item.get("thumbnail"),
+                    source_url=item.get("link") or item.get("source"),
+                )
+            )
+        return results
+
 
 _client = SerpApiClient()
 
 
 def get_serpapi_results(query: str) -> list[SerpApiResult]:
     return _client.search(query=query)
+
+
+def get_serpapi_image_results(query: str) -> list[SerpApiImageResult]:
+    return _client.search_images(query=query)

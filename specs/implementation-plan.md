@@ -50,6 +50,7 @@ No code beyond the markdown skill file in this phase.
 | 2.4 | `backend/memory.py` — in-memory dict by `conversation_id` | MVP session store |
 | 2.5 | `backend/main.py` — FastAPI app, CORS, routes | `/health`, `/api/v1/chat` |
 | 2.6 | `backend/schemas.py` — Pydantic request/response models | OpenAPI types |
+| 2.7 | Add image search enrichment through SerpAPI Google Images | Optional image metadata and HTML snippets |
 
 **Structure:**
 
@@ -78,6 +79,7 @@ backend/
 | 3.4 | Page title and chat box | US-1 |
 | 3.5 | Sidebar saved chats with local JSON persistence | US-8 |
 | 3.6 | Clickable follow-up suggestions after assistant replies | US-12 |
+| 3.7 | Render returned image results as HTML `<img>` tags | Image search UX |
 
 ---
 

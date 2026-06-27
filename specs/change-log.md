@@ -6,6 +6,28 @@ Format: newest first.
 
 ---
 
+## [0.4.4] - 2026-06-27 - Add image search rendering
+
+**Type:** Spec change | Feature
+**Scope:** product-spec | implementation-plan | test-plan | backend | frontend
+
+### Changed
+
+- Added optional travel-related image search through SerpAPI Google Images.
+- Chat responses can include image metadata and an HTML snippet containing `<img>` tags.
+- The Streamlit frontend renders returned image HTML below assistant replies.
+
+### Why
+
+- The user requested image search output, for example searching Quan ho and creating image tags in HTML.
+
+### Impact on implementation
+
+- Image results are optional enrichment and are not treated as verified historical evidence.
+- Chat still works if image search is disabled, unavailable, or returns no results.
+
+---
+
 ## [0.4.3] — 2026-06-27 — Contextual follow-up suggestions
 
 **Type:** Fix | Feature

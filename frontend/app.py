@@ -60,6 +60,15 @@ def make_title(message: str) -> str:
 
 def is_travel_scope_prompt(prompt: str) -> bool:
     lower_prompt = prompt.lower()
+    travel_or_image_keywords = {
+        "travel", "trip", "tour", "hotel", "weather", "food", "restaurant", "destination",
+        "sightseeing", "landmark", "check-in", "checkin", "image", "photo", "picture",
+        "ảnh", "hình", "hinh", "img", "quan họ", "quan ho", "bắc ninh", "bac ninh",
+        "du lá»‹ch", "danh lam", "tháº¯ng cáº£nh",
+    }
+    if any(keyword in lower_prompt for keyword in travel_or_image_keywords):
+        return True
+
     return not any(keyword in lower_prompt for keyword in PROHIBITED_KEYWORDS)
 
 
@@ -221,9 +230,13 @@ def handle_prompt(prompt: str) -> None:
                     st.session_state.conversation_id,
                 )
                 reply = result["reply"]
+                image_html = result.get("image_html") or ""
+                display_reply = f"{reply}\n\n{image_html}" if image_html else reply
                 st.session_state.conversation_id = result["conversation_id"]
                 st.markdown(reply)
-                st.session_state.messages.append({"role": "assistant", "content": reply})
+                if image_html:
+                    st.markdown(image_html, unsafe_allow_html=True)
+                st.session_state.messages.append({"role": "assistant", "content": display_reply})
                 persist_current_conversation()
             except ApiClientError as exc:
                 st.error(f"Could not reach API: {exc}")
@@ -430,7 +443,7 @@ if "keep_chat_at_bottom" not in st.session_state:
 
 with st.sidebar:
     st.header("Chats")
-    if st.button("New chat", use_container_width=True):
+    if st.button("New chat", width="stretch"):
         start_new_chat()
         st.rerun()
 
@@ -444,7 +457,7 @@ with st.sidebar:
         for conversation in conversations:
             label = conversation.get("title") or "Untitled chat"
             button_label = label
-            if st.button(button_label, key=f"chat_{conversation['id']}", use_container_width=True):
+            if st.button(button_label, key=f"chat_{conversation['id']}", width="stretch"):
                 open_chat(conversation["id"])
                 st.rerun()
     else:
@@ -456,7 +469,7 @@ with st.sidebar:
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        st.markdown(msg["content"], unsafe_allow_html=msg["role"] == "assistant")
 
 prompt = st.chat_input("Ask about your trip")
 

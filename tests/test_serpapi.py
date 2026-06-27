@@ -7,6 +7,7 @@ def test_serpapi_disabled_by_default(monkeypatch):
     client = SerpApiClient()
     assert not client.enabled()
     assert client.search("test") == []
+    assert client.search_images("test") == []
 
 
 def test_serpapi_enabled_if_key_set(monkeypatch):

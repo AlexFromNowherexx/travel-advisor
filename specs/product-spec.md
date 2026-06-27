@@ -274,6 +274,26 @@ A practical itinerary focused on destinations, check-in experiences, food, and r
 - The route remains structured and useful.
 - The output states the assumption that historical context has been intentionally minimized.
 
+### UC-9: Search and display travel-related images
+
+**Sample input:**
+
+```text
+Search images for Quan ho Bac Ninh.
+```
+
+**Expected output:**
+
+The assistant returns the normal text answer plus image results when an image provider is configured. The frontend renders the images as safe HTML `<img>` tags below the answer.
+
+**Acceptance criteria:**
+
+- Image search is limited to travel, sightseeing, culture, food, hotel, or destination-related queries.
+- The backend returns image metadata including title, source URL, image URL, and thumbnail URL when available.
+- The frontend renders returned images as `<img>` tags with alt text.
+- If image search is unavailable or no images are found, the chat still works and shows no broken image tags.
+- Image results are treated as search results, not as verified historical evidence.
+
 ---
 
 ## 7. User Stories
